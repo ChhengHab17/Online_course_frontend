@@ -41,65 +41,69 @@ export const HtmlIde = () => {
   }, [html, css, js]);
 
   return (
-    <div>
-      <div className="flex items-center py-2 bg-[#0f172a]">
-      <button
-        onClick={() => {
-          navigate(`/course/${localStorage.getItem("currentCourseId")}`);
-          // Scroll to top after navigation
-          setTimeout(() => window.scrollTo({ top: 0 , behavior: 'smooth' }), 100);
-        }}
-        className="flex items-center gap-2 px-3 py-1 ml-3 rounded-lg bg-[#2C3E50] text-white 
-    font-semibold shadow hover:bg-[#3d5164] transform transition-all duration-300 
-    hover:scale-105"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
+    <div className="p-4 bg-[#0f172a] min-h-screen">
+      {/* Header */}
+      <div className="flex items-center py-2">
+        <button
+          onClick={() => {
+            navigate(`/course/${localStorage.getItem("currentCourseId")}`);
+            setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 100);
+          }}
+          className="flex items-center gap-2 px-3 py-1 ml-1 rounded-lg bg-[#2C3E50] text-white font-semibold shadow hover:bg-[#3d5164] transition"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-        Back
-      </button>
-      <h1 className="text-2xl font-bold text-gray-200 mx-auto">Test Your Code Here</h1>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-200 mx-auto">Test Your Code Here</h1>
       </div>
+
+      {/* Editors Grid */}
       <div
-        className={`grid gap-1 bg-[#0f172a] ${
+        className={`grid gap-4 ${
           showCss && showJs
-            ? "grid-cols-3"
+            ? "grid-cols-1 md:grid-cols-3"
             : showCss || showJs
-            ? "grid-cols-2"
+            ? "grid-cols-1 md:grid-cols-2"
             : "grid-cols-1"
         }`}
       >
-        <div className="border rounded-tr rounded-tl bg-black overflow-hidden border-none">
-          <div className="flex w-100% justify-between p-2 text-white">
-            <h3 className="">HTML</h3>
+        {/* HTML */}
+        <div className="rounded-lg bg-black shadow overflow-hidden border border-gray-800">
+          <div className="flex items-center justify-between p-2 text-white bg-[#1e293b]">
+            <h3 className="font-semibold">HTML</h3>
           </div>
           <Editor
-            height="300px"
+            height="180px"
+            className="sm:h-[220px] md:h-[280px]"
             language="html"
             value={html}
             onChange={(value) => sethtml(value || "")}
             theme="vs-dark"
             options={{
-              minimap: { enabled: false }, // remove right minimap
+              minimap: { enabled: false },
               scrollBeyondLastLine: false,
+              fontSize: 13,
             }}
           />
         </div>
+
+        {/* CSS */}
         {showCss && (
-          <div className="border rounded-tr rounded-tl bg-black overflow-hidden border-none">
-            <div></div>
-            <div className="flex w-100% justify-between p-2 text-white">
-              <h3 className="">CSS</h3>
+          <div className="rounded-lg bg-black shadow overflow-hidden border border-gray-800">
+            <div className="flex items-center justify-between p-2 text-white bg-[#1e293b]">
+              <h3 className="font-semibold">CSS</h3>
             </div>
             <Editor
-              height="300px"
+              height="180px"
+              className="sm:h-[220px] md:h-[280px]"
               language="css"
               value={css}
               onChange={(value) => setcss(value || "")}
@@ -107,17 +111,21 @@ export const HtmlIde = () => {
               options={{
                 minimap: { enabled: false },
                 scrollBeyondLastLine: false,
+                fontSize: 13,
               }}
             />
           </div>
         )}
+
+        {/* JS */}
         {showJs && (
-          <div className="border rounded-tr rounded-tl bg-black overflow-hidden border-none">
-            <div className="flex w-100% justify-between p-2 text-white">
-              <h3 className="">JS</h3>
+          <div className="rounded-lg bg-black shadow overflow-hidden border border-gray-800">
+            <div className="flex items-center justify-between p-2 text-white bg-[#1e293b]">
+              <h3 className="font-semibold">JS</h3>
             </div>
             <Editor
-              height="300px"
+              height="180px"
+              className="sm:h-[220px] md:h-[280px]"
               language="javascript"
               value={js}
               onChange={(value) => setjs(value || "")}
@@ -125,24 +133,26 @@ export const HtmlIde = () => {
               options={{
                 minimap: { enabled: false },
                 scrollBeyondLastLine: false,
+                fontSize: 13,
               }}
             />
           </div>
         )}
       </div>
 
-      <div className="w-full h-150 border-1">
-        <h2 className="text-center text-2xl font-bold">Output</h2>
-        <iframe
-          srcDoc={srcDoc}
-          title="output"
-          sandbox="allow-scripts allow-modals"
-          frameBorder="0"
-          width="100%"
-          height="100%"
-        >
-          {" "}
-        </iframe>
+      {/* Output */}
+      <div className="w-full mt-8">
+        <h2 className="text-center text-xl md:text-2xl font-bold text-white">Output</h2>
+        <hr className="border-gray-700 my-2" />
+        <div className="w-full aspect-video max-h-[400px] rounded-lg overflow-hidden shadow border border-gray-800">
+          <iframe
+            srcDoc={srcDoc}
+            title="output"
+            sandbox="allow-scripts allow-modals"
+            frameBorder="0"
+            className="w-full h-full bg-white"
+          />
+        </div>
       </div>
     </div>
   );
