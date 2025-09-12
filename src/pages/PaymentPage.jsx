@@ -124,11 +124,12 @@ export const PaymentPage = () => {
     try {
       const res = await checkTransaction(md5); // call your backend
       const data = res.data?.data;
+      console.log("data:", data);
       console.log("Course ID:", course_id);
       console.log("Payment check:", data);
 
       // If acknowledgedDateMs exists, consider it paid
-      if (data?.acknowledgedDateMs) {
+      if (data === "PAID") {
         setSuccess(true);
         clearInterval(interval);
         const token = localStorage.getItem("token");
