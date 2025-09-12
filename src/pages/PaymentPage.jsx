@@ -58,14 +58,20 @@ export const PaymentPage = () => {
       console.log(response);
 
       if (response.success) {
-        setQrImage(response.data.base64);
+        const base64 = response.data.base64 || "";
+        const imgSrc = base64.startsWith("data:") ? base64 : `data:image/png;base64,${base64}`;
+        setQrImage(imgSrc);
         setMd5(response.data.md5);
       } else {
-        alert("Failed to generate QR: " + response.message);
+        setSnackbarMessage("Failed to generate QR: " + (response.message || "Unknown error"));
+        setSnackbarSeverity("error");
+        setOpen(true);
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to generate QR: " + err.message);
+      setSnackbarMessage("Failed to generate QR: " + (err?.response?.data?.message || err.message));
+      setSnackbarSeverity("error");
+      setOpen(true);
     } finally {
       setLoading(false);
     }
@@ -123,15 +129,16 @@ export const PaymentPage = () => {
   const interval = setInterval(async () => {
     try {
       const res = await checkTransaction(md5); // call your backend
-      const data = res.data?.data;
-      console.log("data:", data);
+      console.log("Response from checkTransaction:", res);
+      const { paid } = res || {};
       console.log("Course ID:", course_id);
-      console.log("Payment check:", data);
+      console.log("Payment paid flag:", paid);
 
-      // If acknowledgedDateMs exists, consider it paid
-      if (data === "PAID") {
+      if (paid) {
         setSuccess(true);
         clearInterval(interval);
+        // Clear payment timer on success
+        try { localStorage.removeItem('paymentEndTime'); } catch {}
         const token = localStorage.getItem("token");
         const userId = jwtDecode(token).userId;
 

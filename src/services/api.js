@@ -263,7 +263,34 @@ export const checkTransaction = async (md5Hash) => {
     const result = await axios.post(`${BASE_URL}/payment/verify`, {
       md5: md5Hash,
     });
-    return result.data;
+    const data = result.data; // expected: { success: true, data: <provider_response> }
+
+    // Unwrap possible payloads
+    const payload = data?.data ?? data;
+
+    // Try to infer status from common fields
+    const statusLike = (
+      payload?.status ||
+      payload?.paymentStatus ||
+      payload?.result ||
+      (typeof payload === 'string' ? payload : undefined)
+    );
+
+    let paid = false;
+    if (typeof statusLike === 'string') {
+      const s = statusLike.toUpperCase();
+      paid = s === 'PAID' || s === 'SUCCESS' || s === 'COMPLETED';
+    }
+    // Some gateways include acknowledgedDateMs when paid
+    if (!paid && (payload?.acknowledgedDateMs || payload?.acknowledged_date_ms)) {
+      paid = true;
+    }
+
+    return {
+      success: Boolean(data?.success ?? paid),
+      paid,
+      raw: data,
+    };
   } catch (error) {
     console.error('Check transaction error:', error);
     throw error;
