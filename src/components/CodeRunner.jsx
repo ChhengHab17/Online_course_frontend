@@ -63,7 +63,7 @@ int main() {
   };
 
   return (
-    <div className="min-h-screen h-screen flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#233554] p-2 md:p-6 font-mono text-sm">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#233554] p-2 md:p-6 pb-6 font-mono text-sm">
       {/* Header */}
       <div className="sticky top-0 z-10 flex justify-between items-center mb-4 bg-[#0f172a] bg-opacity-90 rounded-lg shadow px-4 py-3 border border-gray-800">
         <h1 className="text-2xl font-bold text-white tracking-tight">Online IDE</h1>
@@ -81,7 +81,7 @@ int main() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col lg:flex-row gap-4">
+  <div className="flex-1 flex flex-col lg:flex-row gap-4">
         {/* Code Editor */}
         <div className="flex-1 flex flex-col bg-[#1e293b] rounded-2xl shadow-lg border border-gray-800 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-2 bg-[#0f172a] text-gray-200 text-sm font-semibold border-b border-gray-700">

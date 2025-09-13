@@ -25,6 +25,13 @@ const TerminalView = forwardRef(({ wsUrl, clientId, lang }, ref) => {
     term.loadAddon(clipboardAddon);
     term.open(terminalRef.current);
     xtermRef.current = term;
+    // Fit once mounted
+    try { fitAddon.fit(); } catch {}
+    const handleResize = () => {
+      try { fitAddon.fit(); } catch {}
+    };
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
 
     // Connect WebSocket
     wsRef.current = new WebSocket(wsUrl);
@@ -93,6 +100,8 @@ const TerminalView = forwardRef(({ wsUrl, clientId, lang }, ref) => {
     });
 
     return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
       wsRef.current.close();
       term.dispose();
     };
