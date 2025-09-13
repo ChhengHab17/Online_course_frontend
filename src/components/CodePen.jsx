@@ -29,7 +29,7 @@ export const CodePen = ({ showCss = true, showJs = true }) => {
       : "grid-cols-1";
 
   return (
-    <div className="p-4 bg-[#0f172a] min-h-screen">
+    <div className="p-4 bg-[#0f172a]">
       {/* Editors */}
       <div className={`grid gap-4 ${gridCols}`}>
         {/* HTML */}

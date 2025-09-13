@@ -41,7 +41,7 @@ export const HtmlIde = () => {
   }, [html, css, js]);
 
   return (
-    <div className="p-4 bg-[#0f172a] min-h-screen">
+    <div className="p-4 bg-[#0f172a]">
       {/* Header */}
       <div className="flex items-center py-2">
         <button
